@@ -6,16 +6,16 @@ import { useState, useEffect } from "react";
 
 const Nav = () => {
 
-  const isLogedIn = true;
+  const {data: session} = useSession();
 
   const [providers, setProviders] = useState(null);
   const [toggleDropdown, setToggleDropdown] = useState(false);
 
   useEffect(() => {
-    ( async ()=>{
-      const res= await getProviders();
-      setProviders(res)
-    })
+    (async () => {
+      const res = await getProviders();
+      setProviders(res);
+    })();
   }, []);
   
 
@@ -33,7 +33,7 @@ const Nav = () => {
       </Link>
       {/**desktop navigation */}
       <div className="sm:flex hidden">
-        {isLogedIn ? (
+        {session?.user ? (
           <div className="flex gap-3 md:gap-5">
             <Link href="/create-prompt" className="black_btn">
             Create Post
@@ -58,6 +58,7 @@ const Nav = () => {
             type="button"
             key={provider.name}
             onClick={()=> signIn(provider.id)}
+            className="black_btn"
             >
               SignIn
             </button>
@@ -66,9 +67,10 @@ const Nav = () => {
         )}
 
       </div>
+      
       {/**Mobile Navigation */}
       <div className="sm:hidden flex relative">
-        {isLogedIn ? (
+        {session?.user ? (
           <div className="flex">
             <Image
             src="/assets/images/logo.svg"
@@ -114,6 +116,7 @@ const Nav = () => {
             type="button"
             key={provider.name}
             onClick={()=> signIn(provider.id)}
+            className="black_btn"
             >
               SignIn
             </button>
